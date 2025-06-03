@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Training</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        body {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(rgba(0, 50, 100, 0.7), rgba(0, 50, 100, 0.7)),
+                        url('./static/images/training.jpeg') center/cover no-repeat;
+        }
+        .container1 {
+    max-width: 900px; /* Increased size */
+    width: 90%; /* Makes it responsive */
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 3rem; /* More padding */
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    text-align: center;
+}
+        .progress {
+            height: 25px;
+            font-weight: bold;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    {% include 'menu_admin.html' %}
+<div class="container1 p-5">
+    <h2 class="mb-4">Train Your Model</h2>
+    
+    <button id="trainBtn" class="btn btn-primary w-50" onclick="startTraining()">Train Model</button>
+    
+    <!-- Progress Bar -->
+    <div class="progress mt-4 hidden" id="progressBarContainer">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" 
+             style="width: 0%;" id="progressBar">0%</div>
+    </div>
+
+    <!-- Training Complete Message -->
+    <div class="alert alert-success mt-3 hidden" id="completeMsg">
+        🎉 Training Completed Successfully!
+    </div>
+
+    <!-- Accuracy Graph -->
+    <canvas id="accuracyChart" class="hidden mt-4"></canvas>
+</div>
+
+<script>
+    function startTraining() {
+        let progressBar = document.getElementById("progressBar");
+        let progressContainer = document.getElementById("progressBarContainer");
+        let completeMsg = document.getElementById("completeMsg");
+        let accuracyChart = document.getElementById("accuracyChart");
+        let trainBtn = document.getElementById("trainBtn");
+
+        trainBtn.disabled = true; // Disable button during training
+        progressContainer.classList.remove("hidden");
+        progressBar.style.width = "0%";
+        progressBar.innerText = "0%";
+        completeMsg.classList.add("hidden");
+        accuracyChart.classList.add("hidden");
+
+        let progress = 0;
+        let interval = setInterval(() => {
+            progress += 10;
+            progressBar.style.width = progress + "%";
+            progressBar.innerText = progress + "%";
+            
+            if (progress >= 100) {
+                clearInterval(interval);
+                completeMsg.classList.remove("hidden");
+                trainBtn.disabled = false; // Re-enable button
+                showGraph();
+            }
+        }, 500); // Simulate training delay
+    }
+
+    function showGraph() {
+        let ctx = document.getElementById("accuracyChart").getContext("2d");
+        document.getElementById("accuracyChart").classList.remove("hidden");
+
+        new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: ["Epoch 1", "Epoch 2", "Epoch 3", "Epoch 4", "Epoch 5"],
+                datasets: [{
+                    label: "Model Accuracy",
+                    data: [65, 72, 78, 85, 90], // Example accuracy values
+                    borderColor: "#007bff",
+                    backgroundColor: "rgba(0, 123, 255, 0.2)",
+                    borderWidth: 2,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+    }
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

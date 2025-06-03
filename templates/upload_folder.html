@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Audio Folder</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(rgba(0, 50, 100, 0.7), rgba(0, 50, 100, 0.7)),
+                        url('./static/images/fileupload.jpg') center/cover no-repeat;
+        }
+        .upload-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+        }
+        .file-input {
+            position: relative;
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            border: 2px dashed #007bff;
+            border-radius: 10px;
+            cursor: pointer;
+            background-color: #f8f9fa;
+        }
+        .file-input i {
+            font-size: 2rem;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        .file-input span {
+            display: block;
+            font-size: 1rem;
+            color: #6c757d;
+        }
+        .file-input input {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .btn-upload {
+            background-color: #007bff;
+            border: none;
+            padding: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .btn-upload:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    {% include 'menu_admin.html' %}
+    <div class="upload-container">
+        <h2 class="mb-4">Upload Audio Folder</h2>
+        
+        <label class="file-input" id="fileLabel">
+            <i class="fas fa-folder-open"></i>
+            <span id="fileText">Click to upload folder</span>
+            <input type="file" id="folderUpload" webkitdirectory directory multiple accept="audio/*">
+        </label>
+        
+      
+        <div id ="alert" class="alert alert-info" style="display: none;">
+            <strong>Success!</strong> File Uploded Successfuly
+          </div>
+    </div>
+
+    <script>
+      
+        document.getElementById("folderUpload").addEventListener("change", function () {
+            let files = this.files;
+            if (files.length === 0) {
+                alert("No folder selected. Please choose a folder with audio files.");
+            } else {
+                document.getElementById("fileText").textContent = `Selected ${files.length} files`;
+                alert("Folder uploaded successfully! Total files: " + files.length);
+                document.getElementById("alert").style.display = "block";  // Show alert
+                
+            }
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

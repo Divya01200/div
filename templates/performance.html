@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Training</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(rgba(0, 50, 100, 0.7), rgba(0, 50, 100, 0.7)),
+                        url('./static/images/performance.jpg') center/cover no-repeat;
+        }
+        .container1 {
+    max-width: 1000px; /* Increased size */
+    width: 90%; /* Makes it responsive */
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 3rem; /* More padding */
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    text-align: center;
+}
+        .progress {
+            height: 25px;
+            font-weight: bold;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    {% include 'menu_admin.html' %}
+<div class="container1 p-5">
+    <h2 class="mb-4">Performance</h2>
+   
+    <!-- Accuracy Graph -->
+    <canvas id="accuracyChart" class="hidden mt-4"></canvas>
+</div>
+
+<script>
+
+        let ctx = document.getElementById("accuracyChart").getContext("2d");
+        document.getElementById("accuracyChart").classList.remove("hidden");
+
+        new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: ["Epoch 1", "Epoch 2", "Epoch 3", "Epoch 4", "Epoch 5"],
+                datasets: [{
+                    label: "Model Accuracy",
+                    data: [65, 72, 78, 85, 90], // Example accuracy values
+                    borderColor: "#007bff",
+                    backgroundColor: "rgba(0, 123, 255, 0.2)",
+                    borderWidth: 2,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+   
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

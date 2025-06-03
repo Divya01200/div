@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Emotion Recognition</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: url('static/images/Livess.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: rgb(237, 237, 239);
+            text-align: center;
+            padding-top: 50px;
+        }
+        h1 {
+            color: #6435dc;
+        }
+        .mic-icon {
+            font-size: 200px;
+            color: hsl(249, 41%, 97%);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .mic-icon:hover {
+            transform: scale(1.1);
+        }
+        .controls {
+            margin-top: 20px;
+        }
+        #timer {
+            font-size: 24px;
+            margin-top: 10px;
+        }
+        #audioPlayer {
+            display: none;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 400px;
+        }
+        .audio-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body style="text-align: center; " class="p-5">
+    {% include 'menu_user.html' %}
+    <h1 class="p-5">Speech Emotion Recognition</h1>
+    <div class="container1">
+        <i class="fas fa-microphone mic-icon" id="startRecording"></i>
+        <div id="timer">00:00</div>
+        <div class="controls">
+            <button class="btn btn-danger" id="stopRecording" disabled>End</button>
+            <button class="btn btn-success" id="saveRecording" disabled>Save</button>
+        </div>
+        <div class="audio-container">
+            <audio controls id="audioPlayer"></audio>
+        </div>
+    </div>
+    <script>
+        let mediaRecorder;
+        let audioChunks = [];
+        let timerInterval;
+        let seconds = 0;
+
+        function updateTimer() {
+            seconds++;
+            const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
+            const secs = String(seconds % 60).padStart(2, '0');
+            document.getElementById('timer').textContent = `${mins}:${secs}`;
+        }
+        
+        document.getElementById('startRecording').addEventListener('click', async () => {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            audioChunks = [];
+            
+            mediaRecorder.ondataavailable = event => {
+                audioChunks.push(event.data);
+            };
+            
+            mediaRecorder.start();
+            document.getElementById('stopRecording').disabled = false;
+            seconds = 0;
+            document.getElementById('timer').textContent = "00:00";
+            timerInterval = setInterval(updateTimer, 1000);
+            
+            mediaRecorder.addEventListener("stop", () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                const audioUrl = URL.createObjectURL(audioBlob);
+                const audioPlayer = document.getElementById('audioPlayer');
+                audioPlayer.src = audioUrl;
+                audioPlayer.style.display = 'block';
+                audioPlayer.play();
+            });
+        });
+        
+        document.getElementById('stopRecording').addEventListener('click', () => {
+            mediaRecorder.stop();
+            clearInterval(timerInterval);
+            document.getElementById('saveRecording').disabled = false;
+        });
+        
+        document.getElementById('saveRecording').addEventListener('click', async () => {
+    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+
+    try {
+        const handle = await window.showSaveFilePicker({
+            suggestedName: 'recorded_audio.wav',
+            types: [{ description: 'Audio File', accept: { 'audio/wav': ['.wav'] } }]
+        });
+
+        const writable = await handle.createWritable();
+        await writable.write(audioBlob);
+        await writable.close();
+
+        console.log('Audio saved successfully.');
+    } catch (error) {
+        console.error('Error saving file:', error);
+    }
+
+    audioChunks = [];
+    document.getElementById('stopRecording').disabled = true;
+    document.getElementById('saveRecording').disabled = true;
+});
+
+    </script>
+</body>
+</html>

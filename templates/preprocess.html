@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotion Audio Player</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(rgba(0, 50, 100, 0.7), rgba(0, 50, 100, 0.7)),
+                        url('./static/images/pre.jpg') center/cover no-repeat;
+        }
+        .container1 {
+            max-width: 800px;
+            background-color: rgba(255, 255, 255, 0.95);
+        
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        }
+        .emotion-card {
+            text-align: center;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: 0.3s;
+            border-radius: 10px;
+            padding: 15px;
+            background: #f8f9fa;
+        }
+        .emotion-card:hover {
+            border-color: #007bff;
+            transform: scale(1.05);
+            box-shadow: 0px 5px 15px rgba(0,0,0,0.2);
+        }
+        .emotion-img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .emotion-label {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+        #nowPlaying {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    {% include 'menu_admin.html' %}
+<div class="container1 p-5 text-center">
+    <h2 class="mb-4">Select an Emotion</h2>
+    
+    <div class="row g-3">
+        <!-- Emotion Cards -->
+        <div class="col-4">
+            <div class="emotion-card" onclick="playAudio('happy')">
+                <img src="./static/images/happy.jpg" alt="Happy" class="emotion-img">
+                <div class="emotion-label">Happy</div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="emotion-card" onclick="playAudio('sad')">
+                <img src="./static/images/sad.jpeg" alt="Sad" class="emotion-img">
+                <div class="emotion-label">Sad</div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="emotion-card" onclick="playAudio('angry')">
+                <img src="./static/images/angry.jpeg" alt="Angry" class="emotion-img">
+                <div class="emotion-label">Angry</div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="emotion-card" onclick="playAudio('fear')">
+                <img src="./static/images/fear.jpeg" alt="Fear" class="emotion-img">
+                <div class="emotion-label">Fear</div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="emotion-card" onclick="playAudio('disgust')">
+                <img src="./static/images/disgust.jpeg" alt="Disgust" class="emotion-img">
+                <div class="emotion-label">Disgust</div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="emotion-card" onclick="playAudio('surprise')">
+                <img src="./static/images/surprise.jpeg" alt="Surprise" class="emotion-img">
+                <div class="emotion-label">Surprise</div>
+            </div>
+        </div>
+        <div class="col-4 mx-auto">
+            <div class="emotion-card" onclick="playAudio('neutral')">
+                <img src="./static/images/neutral.jpeg" alt="Neutral" class="emotion-img">
+                <div class="emotion-label">Neutral</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="nowPlaying">Click an emotion to play its audio.</div>
+    
+    <audio id="audioPlayer"></audio>
+</div>
+
+<script>
+    function playAudio(emotion) {
+        var audioPlayer = document.getElementById("audioPlayer");
+        var nowPlaying = document.getElementById("nowPlaying");
+
+        var audioFiles = {
+            "happy": "./static/audio/happy001.wav",
+            "sad": "./static/audio/sad001.wav",
+            "angry": "./static/audio/anger001.wav",
+            "fear": "./static/audio/fear001.wav",
+            "disgust": "./static/audio/disgust001.wav",
+            "surprise": "./static/audio/surprise001.wav",
+            "neutral": "./static/audio/neutral001.wav"
+        };
+
+        if (audioFiles[emotion]) {
+            audioPlayer.src = audioFiles[emotion];
+            audioPlayer.play();
+            nowPlaying.innerHTML = `Now Playing: <strong>${emotion.toUpperCase()}</strong> `;
+        } else {
+            nowPlaying.innerHTML = "Audio not found!";
+        }
+    }
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

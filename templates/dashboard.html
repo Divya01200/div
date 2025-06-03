@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Emotion Recognition</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .card {
+            transition: transform 0.3s ease-in-out;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        .card-img-top {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    {% include 'menu_user.html' %}
+    <div class="container p-5 text-center mt-5">
+        <h1 class="mb-4">Speech Emotion Recognition</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-4"> <a href="{{ url_for('predict_audio') }}">
+                <div class="card shadow" style="cursor: pointer;">
+                    <img src="static/images/uploadaudio.png" class="card-img-top" alt="Audio">
+                    <div class="card-body">
+                        <h5 class="card-title"><b>AUDIO</b></h5>
+                    </div>
+                </div></a>
+            </div>
+            <div class="col-md-4">
+                <a href="{{ url_for('live_predict') }}">
+                <div class="card shadow" style="cursor: pointer;">
+                    <img src="static/images/live.jpeg" class="card-img-top" alt="Live">
+                    <div class="card-body">
+                        <h5 class="card-title"><b>LIVE</b></h5>
+                    </div>
+                </div></a>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

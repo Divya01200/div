@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Emotion Recognition</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+ 
+        body {
+            font-family: Arial, sans-serif;
+            
+            color: white;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+        header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgb(25, 25, 50);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 1px;
+    z-index: 1000;
+}
+        .logo h1 {
+            color: #f2b600;
+            font-size: 24px;
+            text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.5);
+        }
+        nav {
+    margin-left:auto; /* Moves the navigation to the right */
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px 15px;
+    transition: 0.3s;
+}
+
+nav a:hover {
+    color: #3acff4;
+    text-shadow: 0 0 10px #3acff4;
+}
+        .logo img {
+            width: 70%;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        #home {
+            background: url('static/images/1.jpg') no-repeat center center/cover;
+            height:50dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center; 
+            padding: 50px;
+            background-size: cover;
+        }
+        #about {
+            background-color: rgb(239, 239, 247);
+            height:70vh;
+            display: flex;                 
+            justify-content:flex-end;
+            color: #000;
+            text-align: center;
+            padding: 20px;
+            background-size: cover;
+           text-align: justify;
+            font-size: 20px; 
+            line-height: 1.8;
+        }
+        #contact {
+            background-color: rgb(25, 25, 50);
+            height:30vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 50px;
+            background-size: cover;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h2>REAL TIME SPEECH EMOTION RECOGNITION</h2>
+    <nav>
+        <a href="#home"><b>HOME</b></a>
+        <a href="#about"><b>ABOUT</b></a>
+        <a href="#contact"><b>CONTACT</b></a>
+        <a href="{{ url_for('login') }}"><b>LOGIN</b></a>
+    
+    </nav>
+</header>
+<section id="home" class="hero">
+    <div class="content-box">
+        <h1>Detect Emotions from Speech</h1>
+        
+    </div>
+</section>
+<section id="about">
+    <div class="content-box container">
+        <h2>About Us</h2>
+        <p>      Speech Emotion Recognition (SER) is a field of study that deals with inferring human emotions from speech signals. Such systems, often called classification or regression problems, focus on identifying voice input as belonging to various emotion categories. Supervised machine-learning techniques, known for their effectiveness,
+             are often used in many Speech emotion recognition studies.<BR><br>
+                In deep learning, SER is a classification problem where audio samples are categorized into predefined emotions. This task is challenging because defining and consistently classifying emotions can be ambiguous, even for humans. For instance, differentiating between "calm" and "neutral" is difficult, while "angry" and "happy" are more distinct.
+
+                Effective SER models require deep feature extraction and handling the non-linearity of audio signals. Researchers use techniques like time-series analysis and spectrograms, which transform audio data but may lead to feature loss. Improving the robustness of machine learning models in feature extraction from audio is crucial for better performance in classification and generation tasks. </p>
+    </div>
+</section>
+<section id="contact" class="p-5">
+    <div class="content-box p-5">
+        <h2>Contact Us</h2>
+        <p>Have questions? We're here to help. Reach out to us anytime!</p>
+        <p><strong>Email:</strong> vdivya@gmail.com</p>
+        <p><strong>Phone:</strong> +1 (555) 123-4567</p>
+    </div>
+</section>
+</body>
+</html>

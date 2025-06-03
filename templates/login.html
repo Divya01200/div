@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Emotion Recognition - Login</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background:  url('./static/images/login.jpg') center/cover no-repeat;
+        }
+        .navbar-custom {
+            background-color: #1e3a8a;
+            padding: 1rem 0;
+        }
+        .navbar-custom .navbar-brand, .navbar-custom .nav-link {
+    color: white !important;
+    font-size: 1.3rem; /* Increase font size */
+    font-weight: bold; /* Make text bold */
+    padding: 10px 15px; /* Add padding for better spacing */
+    transition: color 0.3s ease-in-out;
+}
+        .login-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+            margin: 2rem;
+        }
+        .icon-input {
+            position: relative;
+        }
+        .icon-input i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #1e40af;
+        }
+        .icon-input input {
+            padding-left: 2.5rem;
+        }
+        .login-header {
+            color: #1e40af;
+            margin-bottom: 1.5rem;
+        }
+        .btn-login {
+            background-color: #1e40af;
+            border: none;
+            padding: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .btn-login:hover {
+            background-color: #172554;
+        }
+        .form-control {
+            padding: 0.8rem 1rem;
+        }
+        .form-control:focus {
+            box-shadow: 0 0 0 0.2rem rgba(30, 64, 175, 0.25);
+            border-color: #1e40af;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">Speech Emotion Recognition</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('home') }}"><b>HOME</b></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}"><b>LOGIN</b></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+                <div class="login-container text-center">
+                    <h2 class="login-header"> Login </h2>
+                    <form method="post">
+                        <div class="mb-4 icon-input">
+                            <i class="fas fa-user"></i>
+                            <input type="text" name="username" class="form-control" placeholder="Username" required>
+                        </div>
+                        <div class="mb-4 icon-input">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" name="password" class="form-control" placeholder="Password" required>
+                        </div>
+                        <div class="mb-4 form-check d-flex justify-content-start">
+                            <input type="checkbox" class="form-check-input" id="rememberMe">
+                            <label class="form-check-label ms-2" for="rememberMe">Remember me</label>
+                        </div>
+                        <button type="submit" class="btn btn-login btn-primary w-100" formaction="{{ url_for('login') }}">Login</button>
+                        <div class="mt-3">
+                            <a href="#" class="text-muted text-decoration-none">Forgot Password?</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

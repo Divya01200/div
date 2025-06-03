@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Emotion Recognition</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: url('./static/images/background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .upload-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        .upload-icon {
+            font-size: 48px;
+            color: #0d6efd;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .upload-icon:hover {
+            color: #0b5ed7;
+        }
+        #fileInput {
+            display: none;
+        }
+        .progress {
+            display: none;
+            margin: 20px 0;
+            width: 100%;
+            height: 10px;
+            background: #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: #0d6efd;
+            transition: width 0.5s ease-in-out;
+        }
+        #alertBox {
+            display: none;
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .alert-success {
+            background: #28a745;
+            color: white;
+        }
+        .alert-danger {
+            background: #dc3545;
+            color: white;
+        }
+        #audioPlayer {
+            width: 100%;
+            margin-top: 20px;
+            display: none;
+        }
+        #fileName {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #ccc;
+            display: none;
+        }
+        .loading {
+            display: none;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .emotion-display {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #2196F3;
+        }
+        .confidence-display {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #0b5b1e;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="text-center">Speech Emotion Recognition</h1>
+
+        <div class="upload-container">
+            <i class="fas fa-cloud-upload-alt upload-icon" id="uploadIcon"></i>
+            <h4 class="mt-2">Upload Audio File</h4>
+            <p class="text-white">Click the icon to select an audio file</p>
+            <input type="file" id="audioFile" accept=".wav,.mp3" />
+            
+            <div class="progress">
+                <div class="progress-bar"></div>
+            </div>
+
+            <div id="alertBox"></div>
+
+            <audio controls id="audioPlayer">
+                Your browser does not support the audio element.
+            </audio>
+
+            <p id="fileName"></p>
+  
+            <button id="predictBtn" onclick="predict()" style="display:none;">Predict Emotion</button>
+      
+        
+        <div class="loading" id="loadingIndicator">
+            Analyzing audio... Please wait...
+        </div>
+
+        <div class="error-message" id="errorMessage"></div>
+
+        <div class="result-section" id="resultSection">
+            <div class="emotion-display" id="emotionResult"></div>
+            <div class="confidence-display" id="confidenceResult"></div>
+        </div>
+    </div>
+</div>
+    <script>
+        $(document).ready(function () {
+            const uploadIcon = $('#uploadIcon');
+            const fileInput = $('#audioFile');
+            const progressBar = $('.progress');
+            const progressBarInner = $('.progress-bar');
+            const alertBox = $('#alertBox');
+            const audioPlayer = $('#audioPlayer');
+            const fileName = $('#fileName');
+            const predictBtn = $('#predictBtn');
+            const loadingIndicator = $('#loadingIndicator');
+            const errorMessage = $('#errorMessage');
+            const resultSection = $('#resultSection');
+    
+            function showAlert(message, type) {
+                alertBox.removeClass('alert-success alert-danger')
+                    .addClass('alert ' + type)
+                    .html(message)
+                    .fadeIn();
+                setTimeout(() => alertBox.fadeOut(), 3000);
+            }
+    
+            uploadIcon.click(function () {
+                fileInput.click();
+            });
+    
+            fileInput.change(function (e) {
+                const file = e.target.files[0];
+                if (!file) return;
+    
+                if (!file.type.startsWith('audio/')) {
+                    showAlert('Please select a valid audio file', 'alert-danger');
+                    return;
+                }
+    
+                fileName.text('Selected file: ' + file.name).show();
+    
+                // Show progress bar animation
+                progressBar.show();
+                progressBarInner.css('width', '0%');
+    
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 10;
+                    progressBarInner.css('width', progress + '%');
+    
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        showAlert('File uploaded successfully!', 'alert-success');
+    
+                        // Show audio player
+                        const objectURL = URL.createObjectURL(file);
+                        audioPlayer.attr('src', objectURL).show();
+    
+                        // ✅ Show and enable Predict button
+                        predictBtn.show().prop('disabled', false).css('pointer-events', 'auto');
+    
+                        // Reset progress bar after delay
+                        setTimeout(() => {
+                            progressBar.hide();
+                            progressBarInner.css('width', '0%');
+                        }, 500);
+                    }
+                }, 200);
+            });
+    
+            // ✅ Ensure Predict button is clickable
+            predictBtn.off('click').on('click', function () {
+                predict();
+            });
+        });
+    
+        function predict() {
+            const fileInput = document.getElementById('audioFile');
+            const file = fileInput.files[0];
+    
+            if (!file) {
+                showAlert('Please select an audio file', 'alert-danger');
+                return;
+            }
+    
+            const formData = new FormData();
+            formData.append('audio', file);
+    
+            $('#loadingIndicator').show();
+            $('#errorMessage').hide();
+            $('#resultSection').hide();
+            $('#predictBtn').prop('disabled', true);
+    
+            fetch('/predict', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    showAlert(data.error, 'alert-danger');
+                } else {
+                    showResult(data.emotion, data.confidence);
+                }
+            })
+            .catch(error => {
+                showAlert('Error processing audio file', 'alert-danger');
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                $('#loadingIndicator').hide();
+                $('#predictBtn').prop('disabled', false);
+            });
+        }
+    
+        function showResult(emotion, confidence) {
+            $('#resultSection').show();
+            $('#emotionResult').text(`Predicted Emotion: ${emotion}`);
+            $('#confidenceResult').text(`Confidence: ${(confidence * 100).toFixed(2)}%`);
+        }
+    </script>
+    
+    
+</body>
+</html>
